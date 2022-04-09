@@ -8,7 +8,7 @@ if __name__ == "__main__":
     df["kfold"] = -1
     df = df.sample(frac=1).reset_index(drop=True)
     y = df.target.values
-    kf = model_selection.StratifiedKFold(n_splits = 10)
+    kf = model_selection.StratifiedKFold(n_splits = 10) # 10 folds for K-fold cross validation
     for fold_, (_, _) in enumerate(kf.split(X=df, y=y)):
         df.loc[:, "kfold"] = fold_
     df.to_csv(os.path.join(input_path, "train_Folds.csv"), index=False)
