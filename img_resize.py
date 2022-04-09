@@ -38,3 +38,13 @@ Parallel(n_jobs=12)(
 # Resize Testing images
 
 input_folder = "/home/karan/Desktop/Melonoma-Classifier/jpeg/test"
+output_folder = "/home/karan/Desktop/Melonoma-Classifier/jpeg/resized_test"
+
+images = glob.glob(os.path.join(input_folder, "*jpg"))
+Parallel(n_jobs=12)(
+    delayed(resize_image)(
+        i,
+        output_folder,
+        (512,512)
+    ) for i in tqdm(images)
+)
