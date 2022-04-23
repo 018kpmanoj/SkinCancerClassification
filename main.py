@@ -7,10 +7,14 @@ import pretrainedmodels
 import torch.nn as nn
 import albumentations
 
+
+from apex import amp
+
 from torch.nn import functional as F
 
 from wtfml.data_loaders.image import ClassificationDataLoader
-
+from wtfml.utils import EarlyStopping
+from wtfml.engine import Engine
 #Area under curve 
 
 
@@ -19,7 +23,7 @@ class SEResNext50_32x4d(nn.Module):
         super(SEResNext50_32x4d, self).__init__()
         self.model = pretrainedmodels.__dict__["se_resnext50_32x4d"](pretrained=pretrained)
         self.out = nn.Linear(2048, 1)
-    def forward(self, image):
+    def forward(self, image, targets):
         bs, _, _, _ = image.shape
         x = self.model.features(image)
         x = F.adaptive_avg_pool2d(x, 1)
@@ -99,7 +103,34 @@ def run(fold):
     model = SEResNext50_32x4d(pretrained="imagenet")
     model.to(device)
 
-    optimizer = torch.optim.Adam(model.parameters(), lr=le-4)
-    scheduler = torch.optim.le_scheduler.ReduceLROnPlateau(
-        
+    optimizer = torch.optim.Adam(model.parameters(), lr=torch.le-4)
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+        optimizer,
+        patience=3,
+        mode = "max"
     )
+
+
+    model, optimizer = amp.initialize(
+        model,
+        optimizer,
+        opt_level = "01",
+        verbosity = 0
+    )
+
+
+    es = EarlyStopping(patience=5, mode="max")
+    for epoch in range(epochs):
+        training_loss = Engine.train(
+            train_loader,
+            model,
+            optimizer,
+            device,
+            fp16=True
+        )
+        predictions, valid_loss = Engine.evaluate(
+            train_loader,
+            model,
+            optimizer,
+            device            
+        )
