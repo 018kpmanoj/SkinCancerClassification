@@ -1,5 +1,4 @@
 from __future__ import division, print_function
-# coding=utf-8
 import sys
 import os
 import glob
@@ -22,7 +21,7 @@ from gevent.pywsgi import WSGIServer
 app = Flask(__name__)
 
 
-Model= load_model('model35.h5')     
+Model= load_model('model20.h5')     
 
 lesion_classes_dict = {
     0 : 'Melanocytic nevi',
