@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                     model.close();
 
 
-                    tv.setText("Probabilities" + "\n" + outputFeature0.getFloatArray()[0] + "\n"+outputFeature0.getFloatArray()[1] + "\n"+outputFeature0.getFloatArray()[2] + "\n" + outputFeature0.getFloatArray()[3] + "\n" + outputFeature0.getFloatArray()[4] + "\n" + outputFeature0.getFloatArray()[5] + "\n" + outputFeature0.getFloatArray()[6]);
+                    tv.setText("Probabilities" + "\n" + "Melanocytic nevi: "+ outputFeature0.getFloatArray()[0]  + "\n"+"Melanoma: "+outputFeature0.getFloatArray()[1] + "\n"+"Benign keratosis-like lesions: "+outputFeature0.getFloatArray()[2] + "\n" + "Basal cell carcinoma: "+outputFeature0.getFloatArray()[3] + "\n" + "Actinic keratoses: "+outputFeature0.getFloatArray()[4] + "\n" + "Vascular lesions: "+outputFeature0.getFloatArray()[5] + "\n" + "Dermatofibroma: "+outputFeature0.getFloatArray()[6]);
                 } catch (IOException e) {
                     // TODO Handle the exception
                 }
